@@ -70,6 +70,9 @@ export type GeneratedArt = {
   backgroundColor: string;
   shapes: ArtShape[];
   seed: number;
+  // Configuração usada (com a seed sorteada), para recarregar no formulário.
+  // Opcional: artes salvas na galeria antes deste campo não têm.
+  config?: ArtConfig;
 };
 
 type Random = () => number;
@@ -109,6 +112,9 @@ function round(value: number): number {
 
 // Evita repetir a mesma cor em formas consecutivas.
 function randomColor(random: Random, palette: string[], previous?: string): string {
+  // Sempre consome um sorteio, para que mudar a paleta não desloque as formas da mesma seed
+  if (palette.length <= 1) random();
+
   if (palette.length === 0) {
     return "#7C6CF2";
   }
@@ -592,6 +598,8 @@ export function generateArt(config: ArtConfig): GeneratedArt {
 
       const color = randomColor(random, config.colorPalette, previousColor);
       previousColor = color;
+      // Sorteada mesmo sem gradiente, para que ligar/desligar não desloque as formas da mesma seed
+      const gradientColor = randomColor(random, config.colorPalette, color);
 
       shapes.push({
         id: shapes.length,
@@ -611,9 +619,7 @@ export function generateArt(config: ArtConfig): GeneratedArt {
               : randomBetween(random, 0.8, 1)
         ),
         strokeWidth: body.strokeWidth ? round(body.strokeWidth) : undefined,
-        gradient: config.gradient
-          ? [color, randomColor(random, config.colorPalette, color)]
-          : undefined,
+        gradient: config.gradient ? [color, gradientColor] : undefined,
       });
 
       placed.push({ ...position, radius });
@@ -627,5 +633,6 @@ export function generateArt(config: ArtConfig): GeneratedArt {
     backgroundColor: config.backgroundColor,
     shapes,
     seed,
+    config: { ...config, seed },
   };
 }
