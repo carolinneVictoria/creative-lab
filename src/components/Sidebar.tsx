@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Images, LayoutGrid, Menu, Palette, Sparkles, X } from "lucide-react";
+import { Images, Menu, Sparkles, X } from "lucide-react";
 
 export function Sidebar() {
     // Celular: opções escondidas até clicar no ícone de menu
