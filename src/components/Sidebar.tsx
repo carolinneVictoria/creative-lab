@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { Images, LayoutGrid, Menu, Palette, Sparkles, X } from "lucide-react";
 
 export function Sidebar() {
@@ -30,28 +31,16 @@ export function Sidebar() {
                 className={`mt-2 w-full space-y-1 text-sm text-gray-300 lg:mt-0 lg:block lg:space-y-2 ${menuOpen ? "block" : "hidden"}`}
             >
                 <li>
-                    <button type="button" className="sidebar-items">
+                    <NavLink to="/" end className="sidebar-items" onClick={() => setMenuOpen(false)}>
                         <Sparkles fill="currentColor" aria-hidden="true" />
                         <span>Gerador de Arte</span>
-                    </button>
+                    </NavLink>
                 </li>
                 <li>
-                    <button type="button" className="sidebar-items">
-                        <LayoutGrid aria-hidden="true" />
-                        <span>Padrões</span>
-                    </button>
-                </li>
-                <li>
-                    <button type="button" className="sidebar-items">
-                        <Palette aria-hidden="true" />
-                        <span>Paletas</span>
-                    </button>
-                </li>
-                <li>
-                    <button type="button" className="sidebar-items">
+                    <NavLink to="/galeria" className="sidebar-items" onClick={() => setMenuOpen(false)}>
                         <Images aria-hidden="true" />
                         <span>Galeria</span>
-                    </button>
+                    </NavLink>
                 </li>
             </ul>
         </nav>
