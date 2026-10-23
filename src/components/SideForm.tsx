@@ -25,22 +25,32 @@ type ArtConfig = {
 }
 
 type SideFormProps = {
+  // Arte exibida ao abrir o formulário; suas configurações pré-carregam os campos
+  initialArt: GeneratedArt | null;
   onGenerate: (art: GeneratedArt) => void;
 };
 
-export function SideForm({ onGenerate }: SideFormProps) {
+const DEFAULT_CONFIG: ArtConfig = {
+    style: "organic",
+    shapeCount: 25,
+    shapeSize: 25,
+    colorPalette: ["#7C6CF2", "#B8AEFF", "#FF8FC7"],
+    backgroundColor: "#111522",
+    gradient: false,
+    overlap: false,
+    dimensions: "512x512",
+    seed: undefined
+};
 
-    const [config, setConfig] = useState<ArtConfig>({
-        style: "organic",
-        shapeCount: 25,
-        shapeSize: 25,
-        colorPalette: ["#7C6CF2", "#B8AEFF", "#FF8FC7"],
-        backgroundColor: "#111522",
-        gradient: false,
-        overlap: false,
-        dimensions: "512x512",
-        seed: undefined
-    });
+// Artes antigas da galeria não guardam a configuração: aproveita só a seed
+function configFromArt(art: GeneratedArt | null): ArtConfig {
+    if (!art) return DEFAULT_CONFIG;
+    return art.config ?? { ...DEFAULT_CONFIG, seed: art.seed };
+}
+
+export function SideForm({ initialArt, onGenerate }: SideFormProps) {
+
+    const [config, setConfig] = useState<ArtConfig>(() => configFromArt(initialArt));
 
     function updateConfig<K extends keyof ArtConfig>(key: K, value: ArtConfig[K]) {
         setConfig((prevConfig) => ({
@@ -105,6 +115,7 @@ export function SideForm({ onGenerate }: SideFormProps) {
                 <label className="block text-sm font-medium mb-1">Paleta de Cores</label>
                 <ColorPickerField
                     maxColors={5}
+                    initialColors={config.colorPalette}
                     onChange={(colors) => {
                     updateConfig("colorPalette", colors);
                     }}
@@ -115,7 +126,7 @@ export function SideForm({ onGenerate }: SideFormProps) {
                     <label className="block text-sm font-medium mb-1">Fundo</label>
                     <ColorPickerField
                         maxColors={1}
-                        initialColors={["#111522"]}
+                        initialColors={[config.backgroundColor]}
                         onChange={(colors) => updateConfig("backgroundColor", colors[0])}
                     />
                 </div>
