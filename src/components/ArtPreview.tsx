@@ -1,19 +1,20 @@
 
 import type { GeneratedArt, ArtShape } from "../utils/generateArt";
 
-import type { RefObject } from "react";
+import { useId, type RefObject } from "react";
 
 type ArtPreviewProps = {
   art: GeneratedArt | null;
-  svgRef: RefObject<SVGSVGElement | null>;
+  svgRef?: RefObject<SVGSVGElement | null>;
 };
 
 type ShapeProps = {
   shape: ArtShape;
+  idPrefix: string;
 };
 
-function Shape({ shape }: ShapeProps) {
-  const gradientId = `shape-gradient-${shape.id}`;
+function Shape({ shape, idPrefix }: ShapeProps) {
+  const gradientId = `${idPrefix}-gradient-${shape.id}`;
 
   // Todas as formas são centralizadas em (0,0) e posicionadas via transform.
   const paint = shape.gradient ? `url(#${gradientId})` : shape.color;
@@ -66,6 +67,9 @@ function Shape({ shape }: ShapeProps) {
 }
 
 export function ArtPreview({ art, svgRef }: ArtPreviewProps) {
+  // IDs únicos por SVG: várias artes na mesma página (galeria) não podem compartilhar gradientes/recortes
+  const idPrefix = `art${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+
   if (!art) {
     return (
       <div className="flex h-full w-full items-center justify-center text-[#A3AAC2]">
@@ -85,13 +89,13 @@ export function ArtPreview({ art, svgRef }: ArtPreviewProps) {
         aria-label="Arte abstrata generativa"
       >
         <defs>
-          <clipPath id="art-clip">
+          <clipPath id={`${idPrefix}-clip`}>
             <rect width={art.width} height={art.height} />
           </clipPath>
         </defs>
 
         {/* Corta formas que ultrapassam a borda da arte */}
-        <g clipPath="url(#art-clip)">
+        <g clipPath={`url(#${idPrefix}-clip)`}>
           <rect
             width={art.width}
             height={art.height}
@@ -99,7 +103,7 @@ export function ArtPreview({ art, svgRef }: ArtPreviewProps) {
           />
 
           {art.shapes.map((shape) => (
-            <Shape key={shape.id} shape={shape} />
+            <Shape key={shape.id} shape={shape} idPrefix={idPrefix} />
           ))}
         </g>
       </svg>
