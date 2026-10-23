@@ -56,8 +56,8 @@ function GalleryCard({ item, onRemove, onOpen }: GalleryCardProps) {
             type="button"
             onClick={() => onOpen(item.art)}
             className={cardButtonClass}
-            aria-label="Abrir no gerador"
-            title="Abrir no gerador"
+            aria-label="Editar arte"
+            title="Editar arte"
           >
             <Pencil className="h-4 w-4" />
           </button>
