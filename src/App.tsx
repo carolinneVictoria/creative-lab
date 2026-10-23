@@ -15,6 +15,9 @@ export default function App() {
     // Gerar uma arte nova descarta as artes que estavam à frente (refazer)
     setHistory([...history.slice(0, index + 1), newArt]);
     setIndex(index + 1);
+
+    // No celular o formulário fica abaixo da arte: volta ao topo para mostrá-la
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function handleUndo() {
