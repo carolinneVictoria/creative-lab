@@ -141,7 +141,7 @@ export function Principal({ art, canUndo, canRedo, onUndo, onRedo }: PrincipalPr
 
           <div className="flex flex-col">
             <h2 className="mb-1 text-xl font-bold text-white lg:mb-2 lg:text-2xl">
-              Gerador de Artes
+              Gerador de Imagens
             </h2>
             <p className="text-sm text-white lg:text-base">
               Explore formas, cores e novas composições!
