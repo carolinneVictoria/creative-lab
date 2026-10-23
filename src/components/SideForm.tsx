@@ -58,7 +58,7 @@ export function SideForm({ onGenerate }: SideFormProps) {
 
     return (
         <div className="w-full shrink-0 bg-[#111522] p-4 text-white lg:h-screen lg:w-100 lg:overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Side Form</h2>
+            <h2 className="text-xl font-bold mb-4">Monte sua Arte</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label htmlFor="style" className="block text-sm font-medium mb-1">Estilo</label>
