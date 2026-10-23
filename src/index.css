@@ -44,3 +44,9 @@
 .sidebar-items:hover {
   background-color: rgb(149 136 255 / 35%);
 }
+
+/* Página atual (classe adicionada pelo NavLink) */
+.sidebar-items.active {
+  background-color: rgb(149 136 255 / 20%);
+  color: #fff;
+}
