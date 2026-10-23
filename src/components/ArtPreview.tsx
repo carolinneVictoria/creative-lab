@@ -1,8 +1,11 @@
 
 import type { GeneratedArt, ArtShape } from "../utils/generateArt";
 
+import type { RefObject } from "react";
+
 type ArtPreviewProps = {
   art: GeneratedArt | null;
+  svgRef: RefObject<SVGSVGElement | null>;
 };
 
 type ShapeProps = {
@@ -62,7 +65,7 @@ function Shape({ shape }: ShapeProps) {
   );
 }
 
-export function ArtPreview({ art }: ArtPreviewProps) {
+export function ArtPreview({ art, svgRef }: ArtPreviewProps) {
   if (!art) {
     return (
       <div className="flex h-full w-full items-center justify-center text-[#A3AAC2]">
@@ -78,6 +81,7 @@ export function ArtPreview({ art }: ArtPreviewProps) {
         viewBox={`0 0 ${art.width} ${art.height}`}
         className="h-full w-full rounded-lg object-contain shadow-2xl"
         role="img"
+        ref={svgRef}
         aria-label="Arte abstrata generativa"
       >
         <defs>
