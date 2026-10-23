@@ -159,7 +159,7 @@ export function Principal({
         <div className="flex items-center gap-3 lg:mb-4 lg:gap-4">
           <Sparkles
             fill="currentColor"
-            className="h-6 w-6 shrink-0 text-[#7C6CF2] lg:h-8 lg:w-8"
+            className="hidden h-8 w-8 shrink-0 text-[#7C6CF2] lg:block"
             aria-hidden="true"
           />
 
