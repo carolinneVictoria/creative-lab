@@ -67,7 +67,7 @@ export default function App() {
                 isSaved={isSaved(art)}
                 onSaveToGallery={handleSaveToGallery}
               />
-              <SideForm onGenerate={handleGenerate} />
+              <SideForm initialArt={art} onGenerate={handleGenerate} />
             </>
           }
         />
