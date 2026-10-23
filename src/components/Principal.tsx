@@ -1,11 +1,13 @@
 
 import {
   AtSign,
+  Check,
   Download,
   Globe,
   Link,
   Mail,
   MessageCircle,
+  Plus,
   RotateCcw,
   RotateCw,
   Share,
@@ -23,6 +25,8 @@ type PrincipalProps = {
   canRedo: boolean;
   onUndo: () => void;
   onRedo: () => void;
+  isSaved: boolean;
+  onSaveToGallery: (art: GeneratedArt, name: string) => boolean;
 };
 
 type Menu = "download" | "share" | null;
@@ -32,7 +36,15 @@ const SHARE_TEXT = "Olha a arte que eu criei no Creative Lab!";
 const menuItemClass =
   "flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-white hover:bg-gray-600";
 
-export function Principal({ art, canUndo, canRedo, onUndo, onRedo }: PrincipalProps) {
+export function Principal({
+  art,
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+  isSaved,
+  onSaveToGallery,
+}: PrincipalProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
   const [openMenu, setOpenMenu] = useState<Menu>(null);
@@ -57,6 +69,18 @@ export function Principal({ art, canUndo, canRedo, onUndo, onRedo }: PrincipalPr
       document.removeEventListener("keydown", handleKey);
     };
   }, [openMenu]);
+
+  function handleSaveToGallery() {
+    if (!art) return;
+
+    // Sem nome personalizado, usa a data e hora como nome
+    const name =
+      fileName.trim() && fileName.trim() !== "creative-lab"
+        ? fileName.trim()
+        : `Arte de ${new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}`;
+
+    onSaveToGallery(art, name);
+  }
 
   function toggleMenu(menu: Menu) {
     setOpenMenu((current) => (current === menu ? null : menu));
@@ -173,7 +197,22 @@ export function Principal({ art, canUndo, canRedo, onUndo, onRedo }: PrincipalPr
             <RotateCw className="h-5 w-5 lg:h-6 lg:w-6" />
           </button>
 
-          <div className="relative ml-auto lg:ml-0">
+          <button
+            type="button"
+            onClick={handleSaveToGallery}
+            disabled={!art || isSaved}
+            className="ml-auto rounded bg-gray-700 px-3 py-1.5 font-bold lg:ml-0 lg:px-4 lg:py-2 text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={isSaved ? "Salvo na galeria" : "Adicionar à galeria"}
+            title={isSaved ? "Salvo na galeria" : "Adicionar à galeria"}
+          >
+            {isSaved ? (
+              <Check className="h-5 w-5 lg:h-6 lg:w-6" />
+            ) : (
+              <Plus className="h-5 w-5 lg:h-6 lg:w-6" />
+            )}
+          </button>
+
+          <div className="relative">
             <button
               type="button"
               onClick={() => toggleMenu("share")}
