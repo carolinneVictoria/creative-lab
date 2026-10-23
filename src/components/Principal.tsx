@@ -151,38 +151,39 @@ export function Principal({ art, canUndo, canRedo, onUndo, onRedo }: PrincipalPr
       </header>
 
       <div className="mb-4 flex shrink-0 justify-end">
-        <div ref={actionsRef} className="flex items-center gap-3 lg:mb-4 lg:gap-4">
+        {/* Celular: desfazer/refazer à esquerda e compartilhar/baixar à direita */}
+        <div ref={actionsRef} className="flex w-full items-center gap-2 lg:mb-4 lg:w-auto lg:gap-4">
           <button
             type="button"
             onClick={onUndo}
             disabled={!canUndo}
-            className="rounded bg-gray-700 px-4 py-2 font-bold text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded bg-gray-700 px-3 py-1.5 font-bold lg:px-4 lg:py-2 text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Desfazer"
           >
-            <RotateCcw />
+            <RotateCcw className="h-5 w-5 lg:h-6 lg:w-6" />
           </button>
 
           <button
             type="button"
             onClick={onRedo}
             disabled={!canRedo}
-            className="rounded bg-gray-700 px-4 py-2 font-bold text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded bg-gray-700 px-3 py-1.5 font-bold lg:px-4 lg:py-2 text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Refazer"
           >
-            <RotateCw />
+            <RotateCw className="h-5 w-5 lg:h-6 lg:w-6" />
           </button>
 
-          <div className="relative">
+          <div className="relative ml-auto lg:ml-0">
             <button
               type="button"
               onClick={() => toggleMenu("share")}
               disabled={!art}
-              className="rounded bg-gray-700 px-4 py-2 font-bold text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded bg-gray-700 px-3 py-1.5 font-bold lg:px-4 lg:py-2 text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label="Compartilhar"
               aria-haspopup="menu"
               aria-expanded={openMenu === "share"}
             >
-              <Share2 />
+              <Share2 className="h-5 w-5 lg:h-6 lg:w-6" />
             </button>
 
             {openMenu === "share" && (
@@ -218,12 +219,12 @@ export function Principal({ art, canUndo, canRedo, onUndo, onRedo }: PrincipalPr
               type="button"
               onClick={() => toggleMenu("download")}
               disabled={!art}
-              className="rounded bg-[#7C6CF2] px-4 py-2 font-bold text-white hover:bg-[#9588FF] disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded bg-[#7C6CF2] px-3 py-1.5 font-bold lg:px-4 lg:py-2 text-white hover:bg-[#9588FF] disabled:cursor-not-allowed disabled:opacity-50"
               aria-label="Baixar arte"
               aria-haspopup="menu"
               aria-expanded={openMenu === "download"}
             >
-              <Download />
+              <Download className="h-5 w-5 lg:h-6 lg:w-6" />
             </button>
 
             {openMenu === "download" && (
