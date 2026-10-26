@@ -69,14 +69,36 @@ export async function exportImage(
   fileName = "creative-lab"
 ) {
   const blob = await svgToBlob(svg, format);
+  // Remove caracteres inválidos em nomes de arquivo
+  const safeName = fileName.replace(/[\\/:*?"<>|]/g, "").trim() || "creative-lab";
+  const fullName = `${safeName}.${format}`;
+
+  // Celular: o atributo download não funciona bem (principalmente no iOS),
+  // então usa o menu nativo, que permite salvar a imagem na galeria/arquivos
+  const isMobile = window.matchMedia("(pointer: coarse)").matches;
+  if (isMobile && typeof navigator.canShare === "function") {
+    const file = new File([blob], fullName, { type: blob.type });
+    if (navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file] });
+        return;
+      } catch (error) {
+        // Usuário cancelou: não cai no download
+        if ((error as Error).name === "AbortError") return;
+      }
+    }
+  }
+
   const downloadUrl = URL.createObjectURL(blob);
   const link = document.createElement("a");
 
   link.href = downloadUrl;
-  // Remove caracteres inválidos em nomes de arquivo
-  const safeName = fileName.replace(/[\\/:*?"<>|]/g, "").trim() || "creative-lab";
-  link.download = `${safeName}.${format}`;
+  link.download = fullName;
+  link.rel = "noopener";
+  // Alguns navegadores móveis só disparam o download se o link estiver no DOM
+  document.body.appendChild(link);
   link.click();
+  link.remove();
 
-  setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+  setTimeout(() => URL.revokeObjectURL(downloadUrl), 60_000);
 }
